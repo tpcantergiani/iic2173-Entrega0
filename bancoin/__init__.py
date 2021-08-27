@@ -7,13 +7,19 @@ from flask_login import LoginManager
 from flask_cors import CORS
 import os
 from flask_mail import Mail
+from dotenv import load_dotenv, find_dotenv
 
 app = Flask(__name__)
-cors = CORS(app)
+load_dotenv(find_dotenv())
+
+secret_key = os.environ.get('SECRET_KEY')
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+cors = CORS(app)
 
-if os.environ.get('PRODUCTION') == 'True':
+
+
+if os.environ.get('FLASK_ENV') == 'production':
     print("*"*15+"production is true"+"*"*15)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
 else:
