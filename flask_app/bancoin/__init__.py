@@ -12,19 +12,16 @@ from dotenv import load_dotenv, find_dotenv
 app = Flask(__name__)
 load_dotenv(find_dotenv())
 
-secret_key = os.environ.get('SECRET_KEY')
-
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+
 cors = CORS(app)
-
-
 
 if os.environ.get('FLASK_ENV') == 'production':
     print("*"*15+"production is true"+"*"*15)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
 else:
     print(" * "*15+"production is false"+" * "*15)
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.environ.get('DB_USERNAME')}:{os.environ.get('DB_PASSWORD')}@localhost:5432/{os.environ.get('DB_NAME')}"
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.environ.get('DB_USERNAME')}:{os.environ.get('DB_PASSWORD')}@postgres:5432/{os.environ.get('DB_NAME')}"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -34,15 +31,15 @@ migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 
-app.config['MAIL_SERVER']= os.environ.get('MAIL_SERVER')
-app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT'))
-app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
-app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
-app.config['MAIL_USE_TLS'] = (os.environ.get('MAIL_USE_TLS') == 'True')
-app.config['MAIL_USE_SSL'] = (os.environ.get('MAIL_USE_SSL') == 'True')
-app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_SENDER')
+# app.config['MAIL_SERVER']= os.environ.get('MAIL_SERVER')
+# app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT'))
+# app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+# app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+# app.config['MAIL_USE_TLS'] = (os.environ.get('MAIL_USE_TLS') == 'True')
+# app.config['MAIL_USE_SSL'] = (os.environ.get('MAIL_USE_SSL') == 'True')
+# app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_SENDER')
 
-mail = Mail(app)
+# mail = Mail(app)
 
 
 import bancoin.routes

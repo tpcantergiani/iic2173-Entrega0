@@ -1,4 +1,4 @@
-FROM python:3.9.1
+FROM python:3.8.10
 
 WORKDIR /python-flask
 
@@ -16,4 +16,5 @@ RUN pip install -r requirements.txt
 
 COPY ./ ./
 
-CMD ["python", "run.py"]
+# CMD ["python3", "run.py"]
+# CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5000", "run:app"]

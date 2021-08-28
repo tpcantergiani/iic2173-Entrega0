@@ -12,23 +12,10 @@ class User(db.Model, UserMixin):
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
-    last_name = db.Column(db.String(20))
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow,nullable=False)
 
-
-    home_id = db.Column(db.Integer, db.ForeignKey('home.id'), nullable=False)
-    contacts = db.relationship('Contact', cascade = "all,delete", backref='user', lazy=True)
-    accesss  = db.relationship('Access', cascade = "all,delete", backref='user', lazy=True)
-
-
-    type = db.Column(db.String(20))
-    __mapper_args__ = {
-        'polymorphic_on': type,
-        'polymorphic_identity': 'user'
-    }
-    
     def __repr__(self):
         return f"User('{self.name}', '{self.email}' )"
 

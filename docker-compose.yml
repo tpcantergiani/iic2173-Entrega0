@@ -1,13 +1,23 @@
 version: "3.6"
 services:
-  app:
-    build: .
-    command: python run.py
-    env_file: 
-      - .env
-    expose: 
-      - "5000"
+  flask_app:
+    container_name: flask_app
+    restart: always
+    build: ./flask_app
     ports:
       - "5000:5000"
+    command: gunicorn -w 1 -b 0.0.0.0:5000 run:app
     volumes:
-      - .:/python-flask
+    - ./services/web/:/usr/src/app/
+  postgres:
+    image: 'postgres:latest'
+    restart: always
+    volumes:
+      - './postgres_data:/var/lib/postgresql/data'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=entrega0
+    ports:
+      - '5432:5432'
+
