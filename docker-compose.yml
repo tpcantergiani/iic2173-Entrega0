@@ -3,19 +3,23 @@ services:
   flask_app:
     links:
       - 'postgres'
+    depends_on:
+      - postgres
     container_name: flask_app
     restart: always
     build: ./flask_app
     ports:
       - "5000:5000"
-    command:  gunicorn -w 1 -b 0.0.0.0:5000 run:app
-    
-    depends_on: 
-      - postgres
+    command:  bash -c "gunicorn -w 1 -b 0.0.0.0:5000 run:app"
+    # command: flask db init
+    # command:  bash -c "flask db upgrade && gunicorn -w 1 -b 0.0.0.0:5000 run:app"
+    # command: gunicorn -w 1 -b 0.0.0.0:5000 run:app
+    # entrypoint: /flask_app/entrypoint.sh
+    # command: ls app
+
     volumes:
-    - ./services/web/:/usr/src/app/
-    # env_file: 
-    #   - .env
+    - ./app/:/usr/src/app/
+    - ./migrations:/usr/src/app/migrations
 
   nginx:
     container_name: nginx
