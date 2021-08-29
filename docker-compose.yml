@@ -8,7 +8,7 @@ services:
     build: ./flask_app
     ports:
       - "5000:5000"
-    command:  bash -c "flask db init && flask db migrate && flask db upgrade && gunicorn -w 1 -b 0.0.0.0:5000 run:app"
+    command:  gunicorn -w 1 -b 0.0.0.0:5000 run:app
     
     depends_on: 
       - postgres
