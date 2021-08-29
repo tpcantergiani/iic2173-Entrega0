@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from flask_migrate import Migrate
 # from flask import render_template, url_for, flash, redirect, request
 from flask_cors import CORS
 import os
@@ -27,10 +27,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 db = SQLAlchemy(app)
+
 migrate = Migrate(app, db)
+
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
-
 # app.config['MAIL_SERVER']= os.environ.get('MAIL_SERVER')
 # app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT'))
 # app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')

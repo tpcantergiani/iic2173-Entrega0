@@ -1,14 +1,31 @@
 version: "3.6"
 services:
   flask_app:
+    links:
+      - 'postgres'
     container_name: flask_app
     restart: always
     build: ./flask_app
     ports:
       - "5000:5000"
-    command: gunicorn -w 1 -b 0.0.0.0:5000 run:app
+    command:  bash -c "flask db init && flask db migrate && flask db upgrade && gunicorn -w 1 -b 0.0.0.0:5000 run:app"
+    
+    depends_on: 
+      - postgres
     volumes:
     - ./services/web/:/usr/src/app/
+    env_file: 
+      - .env
+
+  nginx:
+    container_name: nginx
+    restart: always
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - flask_app
+
   postgres:
     image: 'postgres:latest'
     restart: always
@@ -20,4 +37,6 @@ services:
       - POSTGRES_DB=entrega0
     ports:
       - '5432:5432'
+    expose:
+      - 5432
 
