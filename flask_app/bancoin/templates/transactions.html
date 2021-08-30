@@ -6,7 +6,8 @@
             <thead>
               <tr>
                 <th>Product</th>
-                <th>Cuantities</th>
+                <th>Intention</th>
+                <th>Quantity</th>
                 <th>Date</th>
               </tr>
             </thead>
@@ -14,7 +15,8 @@
               {% for transation in current_user.transactions %}
                 <tr>
                   <td>{{ transation.product.name }}</td>
-                  <td>{{ transation.cuantity }}</td>
+                  <td>{{ transation.intention }}</td>
+                  <td>{{ transation.quantity }}</td>
                   <td>{{ transation.created_at }}</td>
                 </tr>
               {% endfor %}
