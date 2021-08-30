@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Your Profile</h1>
-    <p>{{ current_user.name }}</p>
+    <p>name: {{ current_user.name }}</p>
+    <p>email: {{ current_user.email }}</p>
+    <p>created at :{{ current_user.created_at }}</p>
 {% endblock content %}

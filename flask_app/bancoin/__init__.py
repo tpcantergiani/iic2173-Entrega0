@@ -18,10 +18,11 @@ cors = CORS(app)
 
 if os.environ.get('FLASK_ENV') == 'production':
     print("*"*15+"production is true"+"*"*15)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+    # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.environ.get('DB_USERNAME')}:{os.environ.get('DB_PASSWORD')}@postgres:5432/{os.environ.get('DB_NAME')}"
 else:
     print(" * "*15+"production is false"+" * "*15)
-    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.environ.get('DB_USERNAME')}:{os.environ.get('DB_PASSWORD')}@postgres:5432/{os.environ.get('DB_NAME')}"
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{os.environ.get('DB_USERNAME')}:{os.environ.get('DB_PASSWORD')}@localhost:5432/{os.environ.get('DB_NAME')}"
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

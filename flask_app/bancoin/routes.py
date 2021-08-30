@@ -12,7 +12,15 @@ def home():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     else:
-        return jsonify({"msg": "Hello world!"}), 201
+        return render_template('home.html', title='Login')
+
+@app.route('/transactions')
+def transactions():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        return render_template('transactions.html', title='Transactions')
+
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div>
+        <h1>Your Transactions</h1>
+        <table id="data" class="table table-striped">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Cuantities</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for transation in current_user.transactions %}
+                <tr>
+                  <td>{{ transation.product.name }}</td>
+                  <td>{{ transation.cuantity }}</td>
+                  <td>{{ transation.created_at }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+    </div>
+
+{% endblock content %}
