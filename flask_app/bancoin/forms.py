@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from bancoin.models import User
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, SelectField
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
+from bancoin.models import User, Product
 
 class RegistrationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=4, max=20)])
@@ -25,3 +25,18 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+def product_attributes(product):
+    return (product.name, product.id)
+
+def product_choices():
+    products = Product.quety.all()
+    return list(products.map(product_attributes, products))
+
+class TransactionForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(min=4, max=20)])
+    quantity = FloatField('Quantity', validators=[DataRequired(), NumberRange(min=0)])
+    product_id = SelectField('Product', validators=[DataRequired()])
+    intention = SelectField('Intention', choices=[('sell', 'Selling'), ('buy', 'Buying')], validators=[DataRequired()])
+    submit = SubmitField('New Transaction')
+

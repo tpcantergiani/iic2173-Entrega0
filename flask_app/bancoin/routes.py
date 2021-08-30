@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from bancoin import app, db, bcrypt
-from bancoin.models import User
-from bancoin.forms import RegistrationForm, LoginForm
+from bancoin.models import Transaction, User, Product
+from bancoin.forms import RegistrationForm, LoginForm, TransactionForm
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_cors import cross_origin
 
@@ -54,6 +54,25 @@ def login():
             flash('Login unsuccessful. Please check credentials.', 'danger')
 
     return render_template('login.html', title='Login', form=form)
+
+@app.route("/new-transaction", methods=['GET', 'POST'])
+def new_transaction():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    form = TransactionForm()
+    form.product_id.choices = [(p.id, p.name) for p in Product.query.order_by('name')]
+    if form.validate_on_submit():
+        transaction = Transaction(
+            quantity=form.quantity.data, 
+            intention=form.intention.data,
+            product_id=form.product_id.data,
+            user_id=current_user.id
+            )
+        db.session.add(transaction)
+        db.session.commit()
+        flash(f'Transaction Created Successfully!', 'success')
+        return redirect(url_for('transactions'))
+    return render_template('new_transaction.html', title='New Transaction', form=form)
 
 
 @app.route("/logout")
