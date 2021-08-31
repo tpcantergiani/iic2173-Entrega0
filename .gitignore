@@ -138,3 +138,5 @@ bancoin/site.db
 .vscode/
 
 postgres_data/
+
+data/
