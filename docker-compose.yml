@@ -19,10 +19,11 @@ services:
     - ./migrations:/usr/src/app/migrations
 
   nginx:
-    container_name: nginx
-    restart: always
+    # container_name: nginx
+    # restart: always
     # restart: unless-stopped
-    build: ./nginx
+    # build: ./nginx
+    image: nginx:1.15-alpine
     ports:
       - "80:80"
       - "443:443"
@@ -32,7 +33,7 @@ services:
       - ./data/certbot/www:/var/www/certbot
     # depends_on:
     #   - flask_app
-    # command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     
   certbot:
     image: certbot/certbot
