@@ -1,7 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, jsonify
 from bancoin import app, db, bcrypt
 from bancoin.models import Transaction, User, Product
-from bancoin.forms import RegistrationForm, LoginForm, TransactionForm
+from bancoin.forms import RegistrationForm, LoginForm, TransactionForm, ProductForm
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_cors import cross_origin
 
@@ -13,13 +13,6 @@ def home():
         return redirect(url_for('login'))
     else:
         return render_template('home.html', title='Login')
-
-@app.route('/transactions')
-def transactions():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login'))
-    else:
-        return render_template('transactions.html', title='Transactions')
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -55,6 +48,21 @@ def login():
 
     return render_template('login.html', title='Login', form=form)
 
+@app.route('/transactions')
+def transactions():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        return render_template('transactions.html', title='Transactions')
+
+@app.route('/products')
+def products():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    else:
+        products = Product.query.all()
+        return render_template('products.html', title='Products',products=products)
+
 @app.route("/new-transaction", methods=['GET', 'POST'])
 def new_transaction():
     if not current_user.is_authenticated:
@@ -73,6 +81,23 @@ def new_transaction():
         flash(f'Transaction Created Successfully!', 'success')
         return redirect(url_for('transactions'))
     return render_template('new_transaction.html', title='New Transaction', form=form)
+
+@app.route("/new-product", methods=['GET', 'POST'])
+def new_product():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    form = ProductForm()
+    if form.validate_on_submit():
+        product = Product(
+            name=form.name.data, 
+            description=form.description.data,
+            value=form.value.data,
+            )
+        db.session.add(product)
+        db.session.commit()
+        flash(f'Product Created Successfully!', 'success')
+        return redirect(url_for('transactions'))
+    return render_template('new_product.html', title='New Product', form=form)
 
 
 @app.route("/logout")

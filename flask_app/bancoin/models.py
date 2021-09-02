@@ -33,12 +33,13 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False, unique=True)
     description = db.Column(db.Text, nullable=True)
+    value = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow,nullable=False)
 
     transactions = db.relationship('Transaction', backref='product', lazy=True)
 
     def __repr__(self):
-        return f"{self.name}: {self.quantity})"
+        return f"{self.name}: {self.description})"
     
     @property
     def serialize(self):

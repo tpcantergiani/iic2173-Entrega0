@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, FloatField, SelectField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from bancoin.models import User, Product
 
@@ -34,9 +34,14 @@ def product_choices():
     return list(products.map(product_attributes, products))
 
 class TransactionForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(), Length(min=4, max=20)])
     quantity = FloatField('Quantity', validators=[DataRequired(), NumberRange(min=0)])
     product_id = SelectField('Product', validators=[DataRequired()])
     intention = SelectField('Intention', choices=[('sell', 'Selling'), ('buy', 'Buying')], validators=[DataRequired()])
     submit = SubmitField('New Transaction')
+
+class ProductForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(min=4, max=20)])
+    value = IntegerField('Value', validators=[DataRequired(), NumberRange(min=0)])
+    description = StringField('Description', validators=[Length(max=400)])
+    submit = SubmitField('New Product')
 

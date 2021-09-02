@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div>
+        <h1>Your Products</h1>
+        <table id="data" class="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Value</th>
+                <th>Description</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for product in products %}
+                <tr>
+                  <td>{{ product.name }}</td>
+                  <td>{{ product.value }}</td>
+                  <td>{{ product.description }}</td>
+                  <td>{{ product.created_at }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+    </div>
+
+{% endblock content %}
