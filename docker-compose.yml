@@ -11,16 +11,17 @@ services:
     build: ./flask_app
     ports:
       - "5000:5000"
-    command:  bash -c "gunicorn -w 1 -b 0.0.0.0:5000 run:app"
+    # command:  bash -c "gunicorn -w 1 -b 0.0.0.0:5000 run:app"
     expose: 
     - 5000
+    entrypoint: ./entrypoint.sh
     volumes:
     - ./app/:/usr/src/app/
     - ./migrations:/usr/src/app/migrations
 
   nginx:
     # container_name: nginx
-    # restart: always
+    restart: always
     # restart: unless-stopped
     # build: ./nginx
     image: nginx:1.18
@@ -45,8 +46,8 @@ services:
 
   postgres:
     image: 'postgres:latest'
-    # restart: always
-    restart: unless-stopped
+    restart: always
+    # restart: unless-stopped
     volumes:
       - './data:/var/lib/postgresql/flask_app/data/'
     environment:
@@ -55,6 +56,4 @@ services:
       - POSTGRES_DB=entrega0
     ports:
       - '5432:5432'
-    expose:
-      - 5432
 
