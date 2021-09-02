@@ -23,7 +23,7 @@ services:
     # restart: always
     # restart: unless-stopped
     # build: ./nginx
-    image: nginx:1.15-alpine
+    image: nginx:1.18
     ports:
       - "80:80"
       - "443:443"
@@ -31,8 +31,8 @@ services:
       - ./data/nginx:/etc/nginx/conf.d
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
-    # depends_on:
-    #   - flask_app
+    depends_on:
+      - flask_app
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     
   certbot:
@@ -48,7 +48,7 @@ services:
     # restart: always
     restart: unless-stopped
     volumes:
-      - './data:/var/lib/postgresql/data'
+      - './data:/var/lib/postgresql/flask_app/data/'
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
